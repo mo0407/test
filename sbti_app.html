@@ -698,23 +698,57 @@
 
     // 页面切换
     function showScreen(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId + '-screen').classList.add('active');
-      currentScreen = screenId;
-      window.scrollTo(0, 0);
+      console.log('🔍 [DEBUG] showScreen 被调用，参数:', screenId);
+      try {
+        document.querySelectorAll('.screen').forEach(s => {
+          s.classList.remove('active');
+          console.log('🔍 [DEBUG] 移除 active 类:', s.id);
+        });
+
+        const targetScreen = document.getElementById(screenId + '-screen');
+        if (!targetScreen) {
+          throw new Error('找不到屏幕元素: ' + screenId + '-screen');
+        }
+
+        targetScreen.classList.add('active');
+        console.log('🔍 [DEBUG] 添加 active 类:', screenId + '-screen');
+
+        currentScreen = screenId;
+        window.scrollTo(0, 0);
+        console.log('✅ [DEBUG] 屏幕切换成功');
+      } catch (error) {
+        console.error('❌ showScreen 错误:', error);
+        throw error;
+      }
     }
 
     // 开始测试
     function startTest() {
-      userAnswers = {};
-      renderQuestions();
-      showScreen('test');
+      console.log('🔍 [DEBUG] startTest 函数被调用');
+      try {
+        userAnswers = {};
+        console.log('🔍 [DEBUG] userAnswers 已重置');
+        renderQuestions();
+        console.log('🔍 [DEBUG] 题目已渲染');
+        showScreen('test');
+        console.log('✅ [DEBUG] 切换到测试页面成功');
+      } catch (error) {
+        console.error('❌ startTest 错误:', error);
+        alert('测试启动失败: ' + error.message);
+      }
     }
 
     // 渲染题目列表
     function renderQuestions() {
-      const container = document.getElementById('question-list');
-      container.innerHTML = questions.map((q, idx) => `
+      console.log('🔍 [DEBUG] renderQuestions 被调用');
+      try {
+        const container = document.getElementById('question-list');
+        if (!container) {
+          throw new Error('找不到 question-list 容器');
+        }
+        console.log('🔍 [DEBUG] 题目数量:', questions.length);
+
+        container.innerHTML = questions.map((q, idx) => `
         <div class="question" id="q-${q.id}">
           <div class="question-meta">
             <span class="badge">题号 ${idx + 1}</span>
@@ -732,6 +766,11 @@
           </div>
         </div>
       `).join('');
+        console.log('✅ [DEBUG] 题目渲染完成');
+      } catch (error) {
+        console.error('❌ renderQuestions 错误:', error);
+        throw error;
+      }
     }
 
     // 选择选项
@@ -879,9 +918,29 @@
 
     // 初始化
     document.addEventListener('DOMContentLoaded', function() {
-      showScreen('start');
-      console.log('✅ SBTI 应用已加载');
+      console.log('🔍 [DEBUG] DOM 加载完成');
+      console.log('🔍 [DEBUG] questions 数组长度:', questions?.length);
+      console.log('🔍 [DEBUG] startTest 函数存在:', typeof startTest);
+
+      try {
+        showScreen('start');
+        console.log('✅ SBTI 应用已加载');
+      } catch (error) {
+        console.error('❌ 初始化错误:', error);
+      }
     });
+
+    // 全局错误捕获
+    window.addEventListener('error', function(e) {
+      console.error('❌ JavaScript 错误:', e.message, e.filename, e.lineno);
+    });
+
+    // 点击测试
+    window.addEventListener('click', function(e) {
+      if (e.target.tagName === 'BUTTON') {
+        console.log('🔍 [DEBUG] 按钮被点击:', e.target.textContent);
+      }
+    }, true);
   </script>
 </body>
 </html>
