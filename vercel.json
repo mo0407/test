@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "name": "sbiti-personality-test",
+  "builds": [
+    {
+      "src": "sbti_app.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/sbti_app.html",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/sbti_app.html"
+    }
+  ]
+}
