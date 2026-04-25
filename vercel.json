@@ -10,7 +10,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/sbti_app.html"
+      "dest": "/index.html"
     }
   ]
 }
